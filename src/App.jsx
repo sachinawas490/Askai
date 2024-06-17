@@ -14,7 +14,7 @@ function App() {
       </div>
       <div className="drawer-side">
         <label htmlFor="my-drawer" className="drawer-overlay"></label>
-        <div className="menu p-4  md:w-80 min-h-full bg-base-200 text-base-content ">
+        <div className="menu p-4 w-[50%]  sm:w-80 min-h-full bg-base-200 text-base-content ">
           <Leftside />
         </div>
       </div>
