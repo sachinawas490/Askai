@@ -9,11 +9,17 @@ function MyProvider({ children }) {
     const [loading, setloading] = useState(false);
     const [data, setdata] = useState('');
     const [newchat, setnewchat] = useState(true);
-    const [question,setquestion]=useState('');
+    const [question, setquestion] = useState('');
+
+    const delayPara = (index, nextWord) => {
+        setTimeout(() => {
+            setdata((prev) => prev + nextWord);
+        }, 75 * index);
+    };
+
     async function callrun() {
         setnewchat(false);
-        console.log("called");
-        setquestion(input)
+        setquestion(input);
         setloading(true);
         let newinput = input + " give the result in text ";
         const temp = await run(newinput);
@@ -26,18 +32,21 @@ function MyProvider({ children }) {
                 newarr += "<b>" + response[i] + "</b>";
             }
         }
-        let t = newarr.split("*").join("</br></br>").replace("#","");
+        let t = newarr.split("*").join("</br></br>").replace("#", "");
+        let newres = t.split(" ");
+        setdata(''); // Reset data before starting word-by-word update
+        for (let i = 0; i < newres.length; i++) {
+            const newword = newres[i];
+            delayPara(i, newword + " ");
+        }
         setloading(false);
-        setdata(t);
-        console.log(">>> ", temp);
-        await setrecent(prev => [...prev, { input, data: t }]);
+        await setrecent((prev) => [...prev, { input, data: t }]); // Ensure data includes the full response
         setinput('');
         console.log("previous input", recent);
     }
-    console.log(data);
 
     return (
-        <myContext.Provider value={{ input, setinput, callrun, recent, data, setdata, loading, newchat,question }}>
+        <myContext.Provider value={{ input, setinput, callrun, recent, data, setdata, loading, newchat, question,setquestion }}>
             {children}
         </myContext.Provider>
     );
